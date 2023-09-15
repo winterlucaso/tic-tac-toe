@@ -1,0 +1,4 @@
+/* Border test */
+* {
+    border: 2px solid red;
+}
