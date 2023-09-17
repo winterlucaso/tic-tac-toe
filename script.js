@@ -9,12 +9,15 @@ const gameBoard = (() => { // TTT board
     // board[1][0], board[1][1], board[1][2]
     // board[2][0], board[2][1], board[2][2]
     const board = [];
-    for (let x = 0; x < 3; x++) {
-        board[x] = [];
-        for (let y = 0; y < 3; y++) {
-            board[x].push(createCell(""));
+    initializeBoard();
+    function initializeBoard() {
+        for (let x = 0; x < 3; x++) {
+            board[x] = [];
+            for (let y = 0; y < 3; y++) {
+                board[x].push(createCell(""));
+            }
         }
-    }
+    };
 
     const getBoard = () => board;
 
@@ -31,6 +34,7 @@ const gameBoard = (() => { // TTT board
     // }
 
     return {
+
         getBoard,
         printBoard,
         // resetBoard,
@@ -83,6 +87,16 @@ const gameController = (() => { // Keeps track of whose turn it is
         gameBoard.getBoard()[row][column].value = activePlayer.value;
         gameBoard.printBoard();
         switchActivePlayer();
+        return;
+    }
+
+    const checkWin = () => {
+        (gameBoard.getBoard()[0][0].value === gameBoard.getBoard()[0][1].value 
+        && gameBoard.getBoard()[0][0].value === gameBoard.getBoard()[0][2].value)
+        return;
+    }
+
+    const checkTie = () => {
         return;
     }
 
