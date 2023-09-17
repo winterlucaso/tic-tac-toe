@@ -16,10 +16,6 @@ const gameBoard = (() => { // TTT board
         }
     }
 
-    // function placeTile() {
-
-    // }
-
     const getBoard = () => board;
 
     const printBoard = () => {
@@ -37,7 +33,7 @@ const gameBoard = (() => { // TTT board
     return {
         getBoard,
         printBoard,
-        resetBoard,
+        // resetBoard,
         //another function here
     };
 })();
@@ -75,8 +71,15 @@ const gameController = (() => { // Keeps track of whose turn it is
         return activePlayer;
     }
 
-    const placeTile = (row, column) => {
-        console.log(activePlayer.name + " is placing a tile at: [" + row + "]["+ column + "]")
+    const placeSign = (row, column) => {
+        // Do nothing if the sign is already filled
+        if (gameBoard.getBoard()[row][column].value !== "") {
+            console.log("This sign is taken");
+            return;
+        }
+
+        // Place sign
+        console.log(activePlayer.name + " is placing a sign at: [" + row + "]["+ column + "]");
         gameBoard.getBoard()[row][column].value = activePlayer.value;
         gameBoard.printBoard();
         switchActivePlayer();
@@ -88,7 +91,7 @@ const gameController = (() => { // Keeps track of whose turn it is
         activePlayer,
         switchActivePlayer,
         getActivePlayer,
-        placeTile,
+        placeSign,
     }
 })();
 
