@@ -28,16 +28,19 @@ const gameBoard = (() => { // TTT board
         // return console.log(board);
     }
 
-    // const resetBoard = () => {
-    //     // for ()
-    //     return console.log("Board has been reset")
-    // }
+    const resetBoard = () => {
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 3; y++) {
+                board[x][y].value = "";
+            }
+        }
+        return console.log("Board has been reset")
+    }
 
     return {
-
         getBoard,
         printBoard,
-        // resetBoard,
+        resetBoard,
         //another function here
     };
 })();
