@@ -88,6 +88,8 @@ const gameController = (() => { // Keeps track of game logic
         console.log(activePlayer.name + " is placing a sign at: [" + row + "]["+ column + "]");
         gameBoard.getBoard()[row][column].value = activePlayer.value;
         gameBoard.printBoard();
+        ScreenController.updateScreen()
+
         if (checkWin(row, column)) {
             //Game End Protocol
         }
@@ -119,7 +121,16 @@ const gameController = (() => { // Keeps track of game logic
     }
 
     const checkTie = () => {
-        return;
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 3; y++) {
+                if (gameBoard.getBoard()[x][y].value === "") {
+                    console.log("checkTie: false")
+                    return false;
+                }
+            }
+        }
+        console.log("checkTie: true")
+        return true;
     }
 
     return {
@@ -127,9 +138,43 @@ const gameController = (() => { // Keeps track of game logic
         getActivePlayer,
         placeSign,
         checkWin,
+        checkTie,
     }
 })();
 
-// const player1 = Player("jeff");
-// const player2 = Player("sally");
+const ScreenController = (() => {
+    // const game = GameController();
+    const playerTurnDiv = document.querySelector('#turn');
+    const boardDiv = document.querySelector('#board');
 
+    const updateScreen = () => {
+        const board = gameBoard.getBoard();
+        const activePlayer = gameController.getActivePlayer();
+
+        // Clear the board
+        boardDiv.textContent = "";
+
+        // Display players turn
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
+
+        // Iterate through board to add elements
+        for (let row = 0; row < 3; row++) {
+            for (let column = 0; column < 3; column++) {
+                // Anything clickable should be a button!!
+                const cellButton = document.createElement("button");
+                cellButton.classList.add("cell");
+                // Apply the correct sign
+                cellButton.innerText = board[row][column].value;
+                boardDiv.appendChild(cellButton);
+            }
+        }
+    }
+
+    return {
+        updateScreen,
+
+    }
+
+})();
+
+ScreenController.updateScreen();

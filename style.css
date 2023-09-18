@@ -1,4 +1,59 @@
 /* Border test */
-* {
+/* * {
     border: 2px solid red;
+} */
+
+/* https://coolors.co/c6d4ff-7a82ab-307473-12664f-2dc2bd */
+:root {
+    --color-1: #C6D4FF;
+    --color-2: #7A82AB;
+    --color-3: #307473;
+    --color-4: #12664F;
+    --color-5: #2DC2BD;
+}
+
+body {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-rows: 100vh;
+    background-color: var(--color-1);
+}
+
+#main-container {
+    background-color: var(--color-4);
+    border: 1px solid black;
+}
+
+header,
+#turn {
+    background-color: var(--color-2);
+    padding: 10px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#board {
+    display: grid;
+    height: 300px;
+    width: 300px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    border: 1px solid black;
+    gap: 2px;
+    padding: 2px;
+    background-color: var(--color-3);
+  }
+
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 2rem;
+    border: 1px solid grey;
+    background: lightyellow;
+    /* cursor: pointer; */
 }
