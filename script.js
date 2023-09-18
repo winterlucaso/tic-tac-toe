@@ -25,7 +25,6 @@ const gameBoard = (() => { // TTT board
         const boardWithValues = board.map((row) => row.map((cell) => cell.value));
         console.log("Updated Board:")
         return console.log(boardWithValues);
-        // return console.log(board);
     }
 
     const resetBoard = () => {
@@ -55,7 +54,7 @@ function createCell(value) {
     };
 }
 
-const gameController = (() => { // Keeps track of whose turn it is
+const gameController = (() => { // Keeps track of game logic
     const player1 = {
         name: "Jeff",
         value: "X"
@@ -89,14 +88,34 @@ const gameController = (() => { // Keeps track of whose turn it is
         console.log(activePlayer.name + " is placing a sign at: [" + row + "]["+ column + "]");
         gameBoard.getBoard()[row][column].value = activePlayer.value;
         gameBoard.printBoard();
-        switchActivePlayer();
+        if (checkWin(row, column)) {
+            //Game End Protocol
+        }
+        else if (checkTie()) {
+            //Game End Protocol
+        }
+        else {
+            switchActivePlayer();
+        }
         return;
     }
 
-    const checkWin = () => {
-        (gameBoard.getBoard()[0][0].value === gameBoard.getBoard()[0][1].value 
-        && gameBoard.getBoard()[0][0].value === gameBoard.getBoard()[0][2].value)
-        return;
+    // Return true if game is won at placed tile
+    const checkWin = (row, column) => {
+        const gameWon = 
+            // Check row of placed sign for win
+            (((gameBoard.getBoard()[row][0].value === gameBoard.getBoard()[row][1].value) && (gameBoard.getBoard()[row][0].value === gameBoard.getBoard()[row][2].value))
+            // Check column of placed sign for win
+            || ((gameBoard.getBoard()[0][column].value === gameBoard.getBoard()[1][column].value) && (gameBoard.getBoard()[0][column].value === gameBoard.getBoard()[2][column].value))
+            // Diagonals win false if middle tile value is empty
+            || ((gameBoard.getBoard()[1][1].value !== "")
+                // Check first diagonal
+                && (((gameBoard.getBoard()[0][0].value === gameBoard.getBoard()[1][1].value) && (gameBoard.getBoard()[0][0].value === gameBoard.getBoard()[2][2].value))
+                // Check second diagonal
+                || ((gameBoard.getBoard()[0][2].value === gameBoard.getBoard()[1][1].value) && (gameBoard.getBoard()[0][2].value === gameBoard.getBoard()[2][0].value)))));
+
+        console.log("checkWin: " + gameWon);
+        return gameWon;
     }
 
     const checkTie = () => {
@@ -104,11 +123,10 @@ const gameController = (() => { // Keeps track of whose turn it is
     }
 
     return {
-        players,
-        activePlayer,
         switchActivePlayer,
         getActivePlayer,
         placeSign,
+        checkWin,
     }
 })();
 
