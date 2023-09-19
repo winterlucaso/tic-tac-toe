@@ -159,16 +159,6 @@ const ScreenController = (() => {
     const playerTurnDiv = document.querySelector('#turn');
     const boardDiv = document.querySelector('#board');
 
-    // const cellDivs = document.querySelectorAll(".cell");
-    // cellDivs.forEach((cell) =>
-    //     cell.addEventListener("click", (e) => {
-    //         console.log("clicked cell!");
-    //         if (gameController.getIsGameOver() || e.target.textContent !== "") return;
-    //         gameController.placeSign(e.target.dataset.row, e.target.dataset.column);
-    //         updateGameboard();
-    //     })
-    // );
-
     const updateScreen = () => {
         const activePlayer = gameController.getActivePlayer();
 
@@ -216,10 +206,6 @@ const ScreenController = (() => {
 
         const endgameMsg = document.querySelector("#endgame-message");
         endgameMsg.textContent = `${gameController.getActivePlayer().name} won!`;
-
-        // const updateEndgameMsg = () => {
-
-        // }
 
         // Restart Button
         const restartBtn = document.querySelector("#restartBtn");
