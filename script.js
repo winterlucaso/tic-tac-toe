@@ -92,15 +92,16 @@ const gameController = (() => { // Keeps track of game logic
         // Check game state
         if (checkWin(row, column)) {
             //Game End Protocol
-            ScreenController.updateScreen()
+            ScreenController.endgameMenu();
+            ScreenController.updateScreen();
         }
         else if (checkTie()) {
             //Game End Protocol
-            ScreenController.updateScreen()
+            ScreenController.updateScreen();
         }
         else {
             switchActivePlayer();
-            ScreenController.updateScreen()
+            ScreenController.updateScreen();
         }
         return;
     }
@@ -150,8 +151,9 @@ const ScreenController = (() => {
     const playerTurnDiv = document.querySelector('#turn');
     const boardDiv = document.querySelector('#board');
 
+    const board = gameBoard.getBoard();
+
     const updateScreen = () => {
-        const board = gameBoard.getBoard();
         const activePlayer = gameController.getActivePlayer();
 
         // Clear the board
@@ -173,8 +175,28 @@ const ScreenController = (() => {
         }
     }
 
+    const endgameMenu = (outcome) => {
+        // Show endgame menu
+        const endgameMenu = document.querySelector("#endgame-menu");
+        endgameMenu.showModal();
+
+        // const updateEndgameMsg = () => {
+
+        // }
+
+        // Restart Button
+        const restartBtn = document.querySelector("#restartBtn");
+        restartBtn.addEventListener("click", () => {
+            gameBoard.resetBoard();
+            ScreenController.updateScreen();
+            endgameMenu.close();
+        });
+        return;
+    }
+
     return {
         updateScreen,
+        endgameMenu,
 
     }
 
