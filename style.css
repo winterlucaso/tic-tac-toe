@@ -35,6 +35,7 @@ header,
     font-size: 20px;
 }
 
+/* Main Board */
 #board {
     display: grid;
     height: 300px;
@@ -56,4 +57,13 @@ header,
     border: 1px solid grey;
     background: lightyellow;
     /* cursor: pointer; */
+}
+
+/* Endgame Menu */
+#endgame-menu {
+    padding: 20px;
+}
+
+#restartBtn {
+    padding: 20px;
 }
