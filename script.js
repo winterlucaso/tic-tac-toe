@@ -4,10 +4,11 @@
 // - if you need only one of something, use a module
 // - if you need multiples of something, use a factory
 
+
+// board[0][0], board[0][1], board[0][2]
+// board[1][0], board[1][1], board[1][2]
+// board[2][0], board[2][1], board[2][2]
 const gameBoard = (() => { // TTT board
-    // board[0][0], board[0][1], board[0][2]
-    // board[1][0], board[1][1], board[1][2]
-    // board[2][0], board[2][1], board[2][2]
     const board = [];
     initializeBoard();
     function initializeBoard() {
@@ -27,19 +28,9 @@ const gameBoard = (() => { // TTT board
         return console.log(boardWithValues);
     }
 
-    const resetBoard = () => {
-        for (let x = 0; x < 3; x++) {
-            for (let y = 0; y < 3; y++) {
-                board[x][y].value = "";
-            }
-        }
-        return console.log("Board has been reset")
-    }
-
     return {
         getBoard,
         printBoard,
-        resetBoard,
         //another function here
     };
 })();
@@ -66,6 +57,8 @@ const gameController = (() => { // Keeps track of game logic
     const players = [player1, player2];
     let activePlayer = players[0];
 
+    let gameOver = false;
+
     const switchActivePlayer = () => {
         activePlayer === players[0] ? activePlayer = players[1] : activePlayer = players[0];
         console.log("Switching activePlayer to: " + activePlayer.name);
@@ -91,18 +84,17 @@ const gameController = (() => { // Keeps track of game logic
 
         // Check game state
         if (checkWin(row, column)) {
-            //Game End Protocol
+            gameOver = true;
             ScreenController.endgameMenu();
-            ScreenController.updateScreen();
         }
         else if (checkTie()) {
-            //Game End Protocol
-            ScreenController.updateScreen();
+            gameOver = true;
+            ScreenController.endgameMenu();
         }
         else {
             switchActivePlayer();
-            ScreenController.updateScreen();
         }
+        ScreenController.updateScreen();
         return;
     }
 
@@ -137,21 +129,46 @@ const gameController = (() => { // Keeps track of game logic
         return true;
     }
 
+    const getIsGameOver = () => {
+        return gameOver;
+    }
+
+    const resetBoard = () => {
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 3; y++) {
+                gameBoard.getBoard()[x][y].value = "";
+            }
+        }
+        gameOver = false;
+        return console.log("Board has been reset")
+    }
+
     return {
         switchActivePlayer,
         getActivePlayer,
         placeSign,
         checkWin,
         checkTie,
+        getIsGameOver,
+        resetBoard,
     }
 })();
 
 const ScreenController = (() => {
-    // const game = GameController();
+    const board = gameBoard.getBoard();
+
     const playerTurnDiv = document.querySelector('#turn');
     const boardDiv = document.querySelector('#board');
 
-    const board = gameBoard.getBoard();
+    // const cellDivs = document.querySelectorAll(".cell");
+    // cellDivs.forEach((cell) =>
+    //     cell.addEventListener("click", (e) => {
+    //         console.log("clicked cell!");
+    //         if (gameController.getIsGameOver() || e.target.textContent !== "") return;
+    //         gameController.placeSign(e.target.dataset.row, e.target.dataset.column);
+    //         updateGameboard();
+    //     })
+    // );
 
     const updateScreen = () => {
         const activePlayer = gameController.getActivePlayer();
@@ -168,14 +185,30 @@ const ScreenController = (() => {
                 // Anything clickable should be a button!!
                 const cellButton = document.createElement("button");
                 cellButton.classList.add("cell");
+                // Add dataset for easier index reading
+                cellButton.dataset.row = row;
+                cellButton.dataset.column = column;
                 // Apply the correct sign
                 cellButton.innerText = board[row][column].value;
                 boardDiv.appendChild(cellButton);
             }
         }
+
+        // Add event listeners to cells
+        const cellDivs = document.querySelectorAll(".cell");
+        cellDivs.forEach((cell) =>
+            cell.addEventListener("click", (e) => {
+                if (gameController.getIsGameOver() || e.target.textContent !== "") {
+                    console.log("Blocking click");
+                    return;
+                }
+                gameController.placeSign(e.target.dataset.row, e.target.dataset.column);
+                // updateScreen();
+            })
+        );
     }
 
-    const endgameMenu = (outcome) => {
+    const endgameMenu = () => {
         // Show endgame menu
         const endgameMenu = document.querySelector("#endgame-menu");
         endgameMenu.showModal();
@@ -187,7 +220,7 @@ const ScreenController = (() => {
         // Restart Button
         const restartBtn = document.querySelector("#restartBtn");
         restartBtn.addEventListener("click", () => {
-            gameBoard.resetBoard();
+            gameController.resetBoard();
             ScreenController.updateScreen();
             endgameMenu.close();
         });
@@ -197,7 +230,6 @@ const ScreenController = (() => {
     return {
         updateScreen,
         endgameMenu,
-
     }
 
 })();
