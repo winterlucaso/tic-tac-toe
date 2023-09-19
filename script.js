@@ -88,16 +88,19 @@ const gameController = (() => { // Keeps track of game logic
         console.log(activePlayer.name + " is placing a sign at: [" + row + "]["+ column + "]");
         gameBoard.getBoard()[row][column].value = activePlayer.value;
         gameBoard.printBoard();
-        ScreenController.updateScreen()
 
+        // Check game state
         if (checkWin(row, column)) {
             //Game End Protocol
+            ScreenController.updateScreen()
         }
         else if (checkTie()) {
             //Game End Protocol
+            ScreenController.updateScreen()
         }
         else {
             switchActivePlayer();
+            ScreenController.updateScreen()
         }
         return;
     }
