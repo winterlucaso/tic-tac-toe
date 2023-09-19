@@ -1,8 +1,5 @@
 // To Do:
-
-// Notes:
-// - if you need only one of something, use a module
-// - if you need multiples of something, use a factory
+// - implement name input
 
 
 // board[0][0], board[0][1], board[0][2]
@@ -15,7 +12,7 @@ const gameBoard = (() => { // TTT board
         for (let x = 0; x < 3; x++) {
             board[x] = [];
             for (let y = 0; y < 3; y++) {
-                board[x].push(createCell(""));
+                board[x].push(createCell("", ""));
             }
         }
     };
@@ -35,9 +32,10 @@ const gameBoard = (() => { // TTT board
     };
 })();
 
-function createCell(value) {
+function createCell(value, player) {
     return {
         value: value,
+        player: player,
 
         getValue() {
             return value;
@@ -80,6 +78,7 @@ const gameController = (() => { // Keeps track of game logic
         // Place sign
         console.log(activePlayer.name + " is placing a sign at: [" + row + "]["+ column + "]");
         gameBoard.getBoard()[row][column].value = activePlayer.value;
+        gameBoard.getBoard()[row][column].player = activePlayer;
         gameBoard.printBoard();
 
         // Check game state
@@ -178,6 +177,9 @@ const ScreenController = (() => {
 
         // Display players turn
         playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
+        if (gameController.getIsGameOver()) {
+            playerTurnDiv.textContent = "Game Over!";
+        }
 
         // Iterate through board to add elements
         for (let row = 0; row < 3; row++) {
@@ -203,7 +205,6 @@ const ScreenController = (() => {
                     return;
                 }
                 gameController.placeSign(e.target.dataset.row, e.target.dataset.column);
-                // updateScreen();
             })
         );
     }
@@ -212,6 +213,9 @@ const ScreenController = (() => {
         // Show endgame menu
         const endgameMenu = document.querySelector("#endgame-menu");
         endgameMenu.showModal();
+
+        const endgameMsg = document.querySelector("#endgame-message");
+        endgameMsg.textContent = `${gameController.getActivePlayer().name} won!`;
 
         // const updateEndgameMsg = () => {
 
@@ -234,4 +238,5 @@ const ScreenController = (() => {
 
 })();
 
+// Initial Render
 ScreenController.updateScreen();
